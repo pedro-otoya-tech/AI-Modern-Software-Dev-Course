@@ -271,3 +271,33 @@ def test_response_has_required_fields():
     assert "has_restriction" in data
     assert "reason" in data
     assert "checked_at" in data
+
+
+# ---------------------------------------------------------------------------
+# `at` query parameter tests
+# ---------------------------------------------------------------------------
+
+def test_at_naive_datetime_restricted():
+    # 2026-03-16 is an even day; plate ending 1 is restricted on even days during hours
+    response = client.get("/pico-y-placa/ABC121?at=2026-03-16T08:00:00")
+    assert response.status_code == 200
+    assert response.json()["has_restriction"] is True
+
+
+def test_at_aware_datetime_restricted():
+    # Same scenario but with explicit Bogotá UTC-5 offset
+    response = client.get("/pico-y-placa/ABC121?at=2026-03-16T08:00:00-05:00")
+    assert response.status_code == 200
+    assert response.json()["has_restriction"] is True
+
+
+def test_at_weekend_no_restriction():
+    # 2026-03-14 is a Saturday — no restriction for any plate
+    response = client.get("/pico-y-placa/ABC121?at=2026-03-14T10:00:00")
+    assert response.status_code == 200
+    assert response.json()["has_restriction"] is False
+
+
+def test_at_invalid_value_returns_422():
+    response = client.get("/pico-y-placa/ABC123?at=not-a-date")
+    assert response.status_code == 422
