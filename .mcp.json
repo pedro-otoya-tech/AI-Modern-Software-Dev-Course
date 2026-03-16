@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "pico-y-placa": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["C:/gits/POCs-vs-code/modern-sw-dev-course/pico-y-placa-api-and-mcp/run_mcp_server.py"],
+      "env": {
+        "PICO_Y_PLACA_API_URL": "http://localhost:8000"
+      }
+    }
+  }
+}
