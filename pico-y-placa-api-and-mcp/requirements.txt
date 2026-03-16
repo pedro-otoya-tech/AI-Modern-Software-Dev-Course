@@ -4,3 +4,6 @@ holidays
 pytest
 httpx
 tzdata
+fastmcp
+respx
+pytest-asyncio
